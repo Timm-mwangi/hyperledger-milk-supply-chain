@@ -1,0 +1,108 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.example.milkblockchain
+
+participant SampleParticipant identified by participantId {
+  o String participantId
+  o String firstName
+  o String lastName
+}
+
+asset SampleAsset identified by assetId {
+  o String assetId
+  --> SampleParticipant owner
+  o String value
+}
+
+transaction SampleTransaction {
+  --> SampleAsset asset
+  o String newValue
+}
+
+event SampleEvent {
+  --> SampleAsset asset
+  o String oldValue
+  o String newValue
+}
+
+/***************/
+
+abstract participant Trader identified by traderId {
+  o String traderId
+  o String name
+}
+
+participant Person identified by username {
+  o String username
+  o String email optional
+}
+
+
+// MANUFACTURE DEFINITIONS
+participant Manufacturer extends Company { 
+}
+
+// REGULATOR DEFINITIONS
+participant Regulator extends Company { 
+}
+
+asset Order identified by orderId {
+  o String orderId
+  o OrderStatus orderStatus default = "PLACED"
+  --> Vehicle vehicle
+  --> Person owner
+}
+
+asset Vehicle identified by vin {
+  o String vin
+  o String trim
+  o String interior
+  o String[] extras
+  --> Manufacturer make
+  o String modelType
+  o String colour
+  o Integer yearOfManufacture default = 2018 range = [2018, ]
+
+}
+
+transaction PlaceOrder {
+  o Order order
+}
+transaction UpdateOrderStatus {
+  o OrderStatus orderStatus
+  --> Order order
+}
+
+event UpdateOrderStatusEvent {
+  o OrderStatus orderStatus
+  o Order order
+}
+
+event PlaceOrderEvent {
+
+  o Order order
+}
+
+enum OrderStatus {
+  o PLACED
+  //o SCHEDULED_FOR_MANUFACTURE
+ // o VIN_ASSIGNED
+ // o OWNER_ASSIGNED
+  o DELIVERED
+}
