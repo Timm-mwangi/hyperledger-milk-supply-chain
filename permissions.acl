@@ -12,12 +12,9 @@
  * limitations under the License.
  */
 
-/**
- * Sample access control list.
- */
 rule EverybodyCanReadEverything {
     description: "Allow all participants read access to all resources"
-    participant: "org.example.milkblockchain.SampleParticipant"
+    participant: "org.example.milkblockchain.Entity"
     operation: READ
     resource: "org.example.milkblockchain.*"
     action: ALLOW
@@ -25,11 +22,29 @@ rule EverybodyCanReadEverything {
 
 rule EverybodyCanSubmitTransactions {
     description: "Allow all participants to submit transactions"
-    participant: "org.example.milkblockchain.SampleParticipant"
+    participant: "org.example.milkblockchain.Entity"
     operation: CREATE
-    resource: "org.example.milkblockchain.SampleTransaction"
+    resource: "org.example.milkblockchain.Order"
     action: ALLOW
 }
+
+rule RetailersCanMakeOrder{
+  description: "Allow retailer to make an order"
+  participant: "org.example.milkblockchain.Retailer"
+  operation: ALL
+  resource: "org.example.milkblockchain.Order"
+  action: ALLOW
+}
+
+rule OnlyManufacturerCanAddNewMilk {
+    description: "Allow manufacturer to make new milk"
+    participant: "org.example.milkblockchain.Manufacturer"
+    operation: CREATE
+    resource: "org.example.milkblockchain.Milk"
+    action: ALLOW
+}
+
+/*
 
 rule OwnerHasFullAccessToTheirAssets {
     description: "Allow all participants full access to their assets"
@@ -39,6 +54,8 @@ rule OwnerHasFullAccessToTheirAssets {
     condition: (r.owner.getIdentifier() === p.getIdentifier())
     action: ALLOW
 }
+
+*/
 
 rule SystemACL {
   description:  "System ACL to permit all access"

@@ -18,72 +18,45 @@
 
 namespace org.example.milkblockchain
 
-participant SampleParticipant identified by participantId {
-  o String participantId
-  o String firstName
-  o String lastName
-}
+//PARTICIPANTS
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  --> SampleParticipant owner
-  o String value
-}
-
-transaction SampleTransaction {
-  --> SampleAsset asset
-  o String newValue
-}
-
-event SampleEvent {
-  --> SampleAsset asset
-  o String oldValue
-  o String newValue
-}
-
-/***************/
-
-abstract participant Trader identified by traderId {
-  o String traderId
+abstract participant Entity identified by entityId {
+  o String entityId
   o String name
 }
 
-participant Person identified by username {
-  o String username
-  o String email optional
-}
+participant Manufacturer extends Entity { }
 
+participant Distributor extends Entity { }
 
-// MANUFACTURE DEFINITIONS
-participant Manufacturer extends Company { 
-}
+participant Retailer extends Entity{ }
 
-// REGULATOR DEFINITIONS
-participant Regulator extends Company { 
+//ASSETS
+
+asset Milk identified by serialNo{
+  o String serialNo
+  o String batchNo
+  o DateTime dateOfManufacture
+  o DateTime dateOfExpiry
+  o Entity custody
+  --> Distributor dist
+  o SoldFlag isSold default = "STOCKED"
 }
 
 asset Order identified by orderId {
   o String orderId
+  o Integer quantity
   o OrderStatus orderStatus default = "PLACED"
-  --> Vehicle vehicle
-  --> Person owner
+  --> Milk milk
+  --> Entity owner
 }
 
-asset Vehicle identified by vin {
-  o String vin
-  o String trim
-  o String interior
-  o String[] extras
-  --> Manufacturer make
-  o String modelType
-  o String colour
-  o Integer yearOfManufacture default = 2018 range = [2018, ]
+transaction Sell{ }
 
-}
-
-transaction PlaceOrder {
+transaction RequestOrder{
   o Order order
 }
+
 transaction UpdateOrderStatus {
   o OrderStatus orderStatus
   --> Order order
@@ -95,14 +68,21 @@ event UpdateOrderStatusEvent {
 }
 
 event PlaceOrderEvent {
-
   o Order order
+}
+
+event DeliverMilk {
+  --> Milk milk
+  o Entity custodyOld
+  o Entity custodyNew
 }
 
 enum OrderStatus {
   o PLACED
-  //o SCHEDULED_FOR_MANUFACTURE
- // o VIN_ASSIGNED
- // o OWNER_ASSIGNED
   o DELIVERED
+}
+
+enum SoldFlag{
+  o SOLD
+  o STOCKED
 }

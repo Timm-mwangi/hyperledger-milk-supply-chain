@@ -27,9 +27,9 @@ chai.should();
 chai.use(require('chai-as-promised'));
 
 const namespace = 'org.example.milkblockchain';
-const assetType = 'SampleAsset';
+const assetType = 'Milk';
 const assetNS = namespace + '.' + assetType;
-const participantType = 'SampleParticipant';
+const participantType = 'Entity';
 const participantNS = namespace + '.' + participantType;
 
 describe('#' + namespace, () => {
