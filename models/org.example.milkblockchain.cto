@@ -22,13 +22,21 @@ abstract participant Entity identified by entityId {
   o String name
 }
 
-participant SysAdmin extends Entity {  }
+participant SysAdmin extends Entity { }
 
-participant Manufacturer extends Entity { }
+participant Manufacturer extends Entity {
+  o Integer cashInAccount
+}
 
-participant Distributor extends Entity { }
+participant Distributor extends Entity { 
+  o Integer cashInAccount
+  o String region
+}
 
-participant Retailer extends Entity{ }
+participant Retailer extends Entity{ 
+  o Integer cashInAccount
+  o String region
+}
 
 //ASSETS
 
@@ -49,8 +57,10 @@ asset Order identified by orderId {
   o String orderId
   o Integer quantity
   o OrderStatus orderStatus default = "PLACED"
+  o Integer value
   //--> Milk milk
-  --> Entity placedBy
+  --> Retailer placedBy
+  --> Distributor takenBy
 }
 
 // TRANSACTIONS
@@ -60,11 +70,11 @@ abstract transaction CreateParticipant {
   //o Entity part
 }
 
-transaction CreateManufacturer{ }
+transaction CreateManufacturer extends CreateParticipant{ }
 
-transaction CreateDistributor{ }
+transaction CreateDistributor extends CreateParticipant{ }
 
-transaction CreateRetailer{ }
+transaction CreateRetailer extends CreateParticipant{ }
 
 //new milk manufactured
 transaction CreateMilk {
@@ -84,15 +94,17 @@ transaction CreateOrder {
 }
 
 //trade between manufacturer and distributor
-transaction Sell{ 
+transaction Sell{
   o Integer saleAmount
   o Batch batch
+  --> Distributor distributor
+  --> Retailer retailer
 }
 
 //distributor -> retailer
 transaction Deliver{
   o Integer saleAmount
-  //--> Order order
+  --> Order order
 }
 
 enum OrderStatus {

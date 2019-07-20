@@ -28,7 +28,7 @@ rule EverybodyCanSubmitTransactions {
     action: ALLOW
 }
 
-rule RetailersCanMakeOrder{
+rule RetailersCanMakeOrder {
   description: "Allow retailer to make an order"
   participant: "org.example.milkblockchain.Retailer"
   operation: ALL
@@ -45,7 +45,6 @@ rule OnlyManufacturerCanAddNewMilk {
 }
 
 /*
-
 rule OwnerHasFullAccessToTheirAssets {
     description: "Allow all participants full access to their assets"
     participant(p): "org.example.milkblockchain.SampleParticipant"
@@ -54,7 +53,6 @@ rule OwnerHasFullAccessToTheirAssets {
     condition: (r.owner.getIdentifier() === p.getIdentifier())
     action: ALLOW
 }
-
 */
 
 rule SystemACL {
