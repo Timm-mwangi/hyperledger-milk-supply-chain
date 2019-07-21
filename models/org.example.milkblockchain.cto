@@ -98,7 +98,7 @@ transaction Sell{
   o Integer saleAmount
   o Batch batch
   --> Distributor distributor
-  --> Retailer retailer
+  --> Manufacturer retailer
 }
 
 //distributor -> retailer

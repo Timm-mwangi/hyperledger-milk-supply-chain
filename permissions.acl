@@ -22,7 +22,7 @@ rule EverybodyCanReadEverything {
 
 rule EverybodyCanSubmitTransactions {
     description: "Allow all participants to submit transactions"
-    participant: "org.example.milkblockchain.Entity"
+    participant: "org.example.milkblockchain.Retailer"
     operation: CREATE
     resource: "org.example.milkblockchain.Order"
     action: ALLOW
