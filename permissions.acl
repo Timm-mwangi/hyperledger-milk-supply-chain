@@ -20,13 +20,13 @@ rule EverybodyCanReadEverything {
     action: ALLOW
 }
 
-rule EverybodyCanSubmitTransactions {
-    description: "Allow all participants to submit transactions"
-    participant: "org.example.milkblockchain.Retailer"
-    operation: CREATE
-    resource: "org.example.milkblockchain.Order"
-    action: ALLOW
-}
+// rule EverybodyCanSubmitTransactions {
+//     description: "Allow all participants to submit transactions"
+//     participant: "org.example.milkblockchain.SysAdmin"
+//     operation: CREATE
+//     resource: "org.example.milkblockchain.Order"
+//     action: ALLOW
+// }
 
 rule RetailersCanMakeOrder {
   description: "Allow retailer to make an order"

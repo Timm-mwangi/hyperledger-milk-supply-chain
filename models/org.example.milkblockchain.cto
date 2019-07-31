@@ -66,30 +66,41 @@ asset Order identified by orderId {
 // TRANSACTIONS
 
 //admin adds new participant to network
-abstract transaction CreateParticipant {
-  //o Entity part
+
+// transaction CreateSysAdmin{
+//   o SysAdmin sysAdmin
+// }
+
+transaction CreateSysAdmin{
+  o SysAdmin sysAdmin
 }
 
-transaction CreateManufacturer extends CreateParticipant{ }
+transaction CreateManufacturer{
+  o Manufacturer manufacturer
+}
 
-transaction CreateDistributor extends CreateParticipant{ }
+transaction CreateDistributor{ 
+  o Distributor distributor
+}
 
-transaction CreateRetailer extends CreateParticipant{ }
+transaction CreateRetailer{
+  o Retailer retailer
+}
 
 //new milk manufactured
 transaction CreateMilk {
-  //o Milk milk
+  o Milk milk
 }
 
 //labelling of milk
 transaction CreateBatch {
-  //o Batch batch
+  o Batch batch
 }
 
 transaction CreateOrder {
   /*the reatailer makes an order, and specifies the amount of milk they want*/
   //o Retailer retailer
-  o Integer quantity
+  o Order order
   --> Retailer retailer
 }
 

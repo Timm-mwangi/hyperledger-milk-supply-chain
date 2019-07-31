@@ -3,7 +3,7 @@
     "composer": "^0.19.20"
   },
   "name": "milk_blockchain",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "Blockchain depiction of milk supply chain",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/milk_blockchain.bna",
