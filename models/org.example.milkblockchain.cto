@@ -58,9 +58,6 @@ asset Order identified by orderId {
   o Integer quantity
   o OrderStatus orderStatus default = "PLACED"
   o Integer value
-  //--> Milk milk
-  --> Retailer placedBy
-  --> Distributor takenBy
 }
 
 // TRANSACTIONS
@@ -90,6 +87,7 @@ transaction CreateRetailer{
 //new milk manufactured
 transaction CreateMilk {
   o Milk milk
+  --> Batch batch
 }
 
 //labelling of milk
@@ -98,10 +96,11 @@ transaction CreateBatch {
 }
 
 transaction CreateOrder {
-  /*the reatailer makes an order, and specifies the amount of milk they want*/
-  //o Retailer retailer
+  /*the retailer makes an order, and specifies the amount of milk they want*/
   o Order order
   --> Retailer retailer
+  --> Distributor distributor
+  --> Manufacturer manufacturer
 }
 
 //trade between manufacturer and distributor
@@ -109,21 +108,19 @@ transaction Sell{
   o Integer saleAmount
   o Batch batch
   --> Distributor distributor
-  --> Manufacturer retailer
+  --> Manufacturer manufacturer
 }
 
 //distributor -> retailer
 transaction Deliver{
   o Integer saleAmount
+  --> Distributor distributor
+  --> Retailer retailer
   --> Order order
 }
 
 enum OrderStatus {
   o PLACED
+  o INTRANSIT
   o DELIVERED
-}
-
-enum SoldFlag{
-  o SOLD
-  o STOCKED
 }
