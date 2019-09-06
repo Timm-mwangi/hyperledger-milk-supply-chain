@@ -1,4 +1,3 @@
-
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +23,7 @@ abstract participant Entity identified by entityId {
 
 participant SysAdmin extends Entity { }
 
-participant Manufacturer extends Entity {
+participant Manufacturer extends Entity{
   o Integer cashInAccount
 }
 
@@ -39,18 +38,16 @@ participant Retailer extends Entity{
 }
 
 //ASSETS
-
 asset Milk identified by serialNo{
   o String serialNo
   o DateTime dateOfManufacture
   o DateTime dateOfExpiry
-  //o SoldFlag isSold default = "STOCKED"
   --> Batch batch
 }
 
 asset Batch identified by batchNo {
   o String batchNo
-  --> Distributor dist
+  --> Distributor distributor
 }
 
 asset Order identified by orderId {
@@ -58,65 +55,76 @@ asset Order identified by orderId {
   o Integer quantity
   o OrderStatus orderStatus default = "PLACED"
   o Integer value
+  --> Retailer placedBy
+  --> Distributor takenBy
+  --> Manufacturer manufacturer
 }
 
 // TRANSACTIONS
 
 //admin adds new participant to network
 
-// transaction CreateSysAdmin{
-//   o SysAdmin sysAdmin
-// }
-
 transaction CreateSysAdmin{
-  o SysAdmin sysAdmin
+  o String entityId
+  o String name
 }
 
 transaction CreateManufacturer{
-  o Manufacturer manufacturer
+  o String entityId
+  o String name
+  o Integer cashInAccount
 }
 
 transaction CreateDistributor{ 
-  o Distributor distributor
+  o String entityId
+  o String name
+  o Integer cashInAccount
+  o String region
 }
 
 transaction CreateRetailer{
-  o Retailer retailer
+  o String entityId
+  o String name
+  o Integer cashInAccount
+  o String region
 }
 
 //new milk manufactured
 transaction CreateMilk {
-  o Milk milk
+  o String serialNo
+  o DateTime dateOfManufacture
+  o DateTime dateOfExpiry
   --> Batch batch
 }
 
 //labelling of milk
 transaction CreateBatch {
-  o Batch batch
+  o String batchNo
+  --> Distributor distributor
 }
 
 transaction CreateOrder {
-  /*the retailer makes an order, and specifies the amount of milk they want*/
-  o Order order
-  --> Retailer retailer
-  --> Distributor distributor
+  o String orderId
+  o Integer quantity
+  o Integer value
+  --> Retailer placedBy
+  --> Distributor takenBy
   --> Manufacturer manufacturer
 }
 
 //trade between manufacturer and distributor
 transaction Sell{
-  o Integer saleAmount
-  o Batch batch
-  --> Distributor distributor
-  --> Manufacturer manufacturer
+  --> Order order
 }
 
 //distributor -> retailer
 transaction Deliver{
-  o Integer saleAmount
-  --> Distributor distributor
-  --> Retailer retailer
   --> Order order
+  //--> Milk milk
+  // o Integer saleAmount
+  // --> Distributor distributor
+  // --> Retailer retailer
+  // --> Order order
 }
 
 enum OrderStatus {

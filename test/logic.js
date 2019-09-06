@@ -458,3 +458,35 @@ describe('#' + namespace, () => {
     });
 
 });
+
+describe('#MakeManufacturer', () => {
+
+    it('should be able to create a manufacturer entity', async () => {
+
+        const factory = businessNetworkConnection.getBusinessNetwork().getFactory();
+
+        // create the manufacturer
+        const manufacturer = factory.newResource(namespace, 'Manufacturer', 'man-001');
+        manufacturer.entityId = 'man-001'
+        manufacturer.name = 'Milk Industry';
+        manufacturer.cashInAccount = 5000;
+
+        // create the publish the bond transaction
+        const MakeManufacturer = factory.newTransaction(namespace, 'MakeManufacturer');
+        MakeManufacturer.manufacturer = manufacturer;
+        MakeManufacturer.id = '2813';
+
+        const manufacturerRegistry = await businessNetworkConnection.getParticipantRegistry(namespace + '.Manufacturer');
+
+        // add the manufacturer
+        await manufacturerRegistry.addAll([manufacturer]);
+
+        // submit the transaction
+        await businessNetworkConnection.submitTransaction(MakeManufacturer);
+
+        // get the bond and check its contents
+        const manRegistry = await businessNetworkConnection.getAssetRegistry(namespace + '.Manufacturer');
+        const newManAsset = await manRegistry.get(MakeManufacturer.id);
+        newManAsset.id.should.equal(MakeManufacturer.id);
+    });
+});
