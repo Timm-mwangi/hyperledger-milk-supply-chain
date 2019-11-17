@@ -19,7 +19,7 @@ function main(error){
      let value = quantity * 50;
      let placedBy_id = 'ret-001';
      let takenBy_id = 'dis-001';
-     let manufacturer_id = 'man-001';
+     let manufacturer_id = 'man-001'; 
  
      let placedBy = factory.newRelationship(namespace, 'Retailer', placedBy_id);
      let takenBy = factory.newRelationship(namespace, 'Distributor', takenBy_id);

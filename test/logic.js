@@ -465,28 +465,31 @@ describe('#MakeManufacturer', () => {
 
         const factory = businessNetworkConnection.getBusinessNetwork().getFactory();
 
-        // create the manufacturer
-        const manufacturer = factory.newResource(namespace, 'Manufacturer', 'man-001');
+        // create the manufacturer manually
+        const manufacturer1 = factory.newResource(namespace, 'Manufacturer', 'man-001');
         manufacturer.entityId = 'man-001'
         manufacturer.name = 'Milk Industry';
         manufacturer.cashInAccount = 5000;
 
-        // create the publish the bond transaction
-        const MakeManufacturer = factory.newTransaction(namespace, 'MakeManufacturer');
-        MakeManufacturer.manufacturer = manufacturer;
-        MakeManufacturer.id = '2813';
+        // create and submit transaction
+        let manufacturer2 = {
+            "entityId": "man-002",
+            "name": "Milk Industry",
+            "cashInAccount": 5000
+        }
+        const MakeManufacturer = factory.newTransaction(namespace, 'MakeManufacturer', manufacturer2);
 
         const manufacturerRegistry = await businessNetworkConnection.getParticipantRegistry(namespace + '.Manufacturer');
 
         // add the manufacturer
-        await manufacturerRegistry.addAll([manufacturer]);
+        await manufacturerRegistry.addAll([manufacturer1]);
 
         // submit the transaction
         await businessNetworkConnection.submitTransaction(MakeManufacturer);
 
-        // get the bond and check its contents
+        // get the manufacturer and check its contents
         const manRegistry = await businessNetworkConnection.getAssetRegistry(namespace + '.Manufacturer');
-        const newManAsset = await manRegistry.get(MakeManufacturer.id);
-        newManAsset.id.should.equal(MakeManufacturer.id);
+        const newManAsset = await manRegistry.get(manufacturer2.id);
+        newManAsset.id.should.equal(Mmanufacturer2.id);
     });
 });

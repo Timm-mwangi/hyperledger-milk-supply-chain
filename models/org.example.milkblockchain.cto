@@ -24,17 +24,17 @@ abstract participant Entity identified by entityId {
 participant SysAdmin extends Entity { }
 
 participant Manufacturer extends Entity{
-  o Integer cashInAccount
+  // o Integer cashInAccount
 }
 
 participant Distributor extends Entity { 
-  o Integer cashInAccount
-  o String region
+  // o Integer cashInAccount
+  // o String region
 }
 
 participant Retailer extends Entity{ 
-  o Integer cashInAccount
-  o String region
+  // o Integer cashInAccount
+  // o String region
 }
 
 //ASSETS
@@ -43,17 +43,18 @@ asset Milk identified by serialNo{
   o DateTime dateOfManufacture
   o DateTime dateOfExpiry
   --> Batch batch
+  o String owner
 }
 
 asset Batch identified by batchNo {
   o String batchNo
-  --> Distributor distributor
+  // --> Distributor distributor
 }
 
 asset Order identified by orderId {
   o String orderId
   o Integer quantity
-  o OrderStatus orderStatus default = "PLACED"
+  o OrderStatus orderStatus
   o Integer value
   --> Retailer placedBy
   --> Distributor takenBy
@@ -72,21 +73,21 @@ transaction CreateSysAdmin{
 transaction CreateManufacturer{
   o String entityId
   o String name
-  o Integer cashInAccount
+  // o Integer cashInAccount
 }
 
 transaction CreateDistributor{ 
   o String entityId
   o String name
-  o Integer cashInAccount
-  o String region
+  // o Integer cashInAccount
+  // o String region
 }
 
 transaction CreateRetailer{
   o String entityId
   o String name
-  o Integer cashInAccount
-  o String region
+  // o Integer cashInAccount
+  // o String region
 }
 
 //new milk manufactured
@@ -95,18 +96,24 @@ transaction CreateMilk {
   o DateTime dateOfManufacture
   o DateTime dateOfExpiry
   --> Batch batch
+  o String owner
 }
 
 //labelling of milk
 transaction CreateBatch {
   o String batchNo
-  --> Distributor distributor
+  // --> Distributor distributor
+}
+
+transaction ChangeOwnership {
+  --> Milk milk
 }
 
 transaction CreateOrder {
   o String orderId
   o Integer quantity
   o Integer value
+  o OrderStatus orderStatus
   --> Retailer placedBy
   --> Distributor takenBy
   --> Manufacturer manufacturer
@@ -114,17 +121,17 @@ transaction CreateOrder {
 
 //trade between manufacturer and distributor
 transaction Sell{
-  --> Order order
+  o String serialNo
 }
 
 //distributor -> retailer
 transaction Deliver{
-  --> Order order
-  //--> Milk milk
+  // --> Order order
+  // --> Milk milk
   // o Integer saleAmount
   // --> Distributor distributor
   // --> Retailer retailer
-  // --> Order order
+  o String serialNo
 }
 
 enum OrderStatus {

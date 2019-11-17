@@ -1,0 +1,6 @@
+query showMilkAllHistorian {
+  description: "Select all historian records"
+  statement: 
+    SELECT org.hyperledger.composer.system.HistorianRecord FROM HistorianRegistry
+    WHERE (transactionType == 'AddAsset' OR transactionType == 'UpdateAsset' OR transactionType == 'RemoveAsset')
+}
