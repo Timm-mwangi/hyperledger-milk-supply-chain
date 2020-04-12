@@ -40,6 +40,7 @@ participant Retailer extends Entity{
 //ASSETS
 asset Milk identified by serialNo{
   o String serialNo
+  o String milkNo
   o DateTime dateOfManufacture
   o DateTime dateOfExpiry
   --> Batch batch
@@ -93,6 +94,7 @@ transaction CreateRetailer{
 //new milk manufactured
 transaction CreateMilk {
   o String serialNo
+  o String milkNo
   o DateTime dateOfManufacture
   o DateTime dateOfExpiry
   --> Batch batch
