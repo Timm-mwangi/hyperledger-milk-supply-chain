@@ -16,14 +16,6 @@ rule EverybodyCanReadEverything {
     description: "Allow all participants read access to all resources"
     participant: "org.example.milkblockchain.Entity"
     operation: READ
-    resource: "org.example.milkblockchain.*"
-    action: ALLOW
-}
-
-rule EverybodyCanSubmitTransactions {
-    description: "Allow all participants to submit transactions"
-    participant: "org.example.milkblockchain.Entity"
-    operation: CREATE
     resource: "org.example.milkblockchain.Order"
     action: ALLOW
 }
@@ -78,3 +70,4 @@ rule NetworkAdminSystem {
     resource: "org.hyperledger.composer.system.**"
     action: ALLOW
 }
+

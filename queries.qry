@@ -1,0 +1,14 @@
+query showMilkSellBySerial {
+  description: "Select all historian records"
+  statement: SELECT org.example.milkblockchain.Sell WHERE (serialNo == _$serialNo)
+}
+
+query showMilkDeliveryBySerial {
+  description: "Select delivery all historian records"
+  statement: SELECT org.example.milkblockchain.Deliver WHERE (serialNo == _$serialNo)
+}
+
+query showMilkByOwner {
+  description: "Only show milk owned by current participant"
+  statement: SELECT org.example.milkblockchain.Milk WHERE (owner == _$owner)
+}

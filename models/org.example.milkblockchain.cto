@@ -1,4 +1,3 @@
-
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,95 +23,121 @@ abstract participant Entity identified by entityId {
 
 participant SysAdmin extends Entity { }
 
-participant Manufacturer extends Entity {
-  o Integer cashInAccount
+participant Manufacturer extends Entity{
+  // o Integer cashInAccount
 }
 
 participant Distributor extends Entity { 
-  o Integer cashInAccount
-  o String region
+  // o Integer cashInAccount
+  // o String region
 }
 
 participant Retailer extends Entity{ 
-  o Integer cashInAccount
-  o String region
+  // o Integer cashInAccount
+  // o String region
 }
 
 //ASSETS
-
 asset Milk identified by serialNo{
   o String serialNo
+  o String milkNo
   o DateTime dateOfManufacture
   o DateTime dateOfExpiry
-  //o SoldFlag isSold default = "STOCKED"
   --> Batch batch
+  o String owner
 }
 
 asset Batch identified by batchNo {
   o String batchNo
-  --> Distributor dist
+  // --> Distributor distributor
 }
 
 asset Order identified by orderId {
   o String orderId
   o Integer quantity
-  o OrderStatus orderStatus default = "PLACED"
+  o OrderStatus orderStatus
   o Integer value
-  //--> Milk milk
   --> Retailer placedBy
   --> Distributor takenBy
+  --> Manufacturer manufacturer
 }
 
 // TRANSACTIONS
 
 //admin adds new participant to network
-abstract transaction CreateParticipant {
-  //o Entity part
+
+transaction CreateSysAdmin{
+  o String entityId
+  o String name
 }
 
-transaction CreateManufacturer extends CreateParticipant{ }
+transaction CreateManufacturer{
+  o String entityId
+  o String name
+  // o Integer cashInAccount
+}
 
-transaction CreateDistributor extends CreateParticipant{ }
+transaction CreateDistributor{ 
+  o String entityId
+  o String name
+  // o Integer cashInAccount
+  // o String region
+}
 
-transaction CreateRetailer extends CreateParticipant{ }
+transaction CreateRetailer{
+  o String entityId
+  o String name
+  // o Integer cashInAccount
+  // o String region
+}
 
 //new milk manufactured
 transaction CreateMilk {
-  //o Milk milk
+  o String serialNo
+  o String milkNo
+  o DateTime dateOfManufacture
+  o DateTime dateOfExpiry
+  --> Batch batch
+  o String owner
 }
 
 //labelling of milk
 transaction CreateBatch {
-  //o Batch batch
+  o String batchNo
+  // --> Distributor distributor
+}
+
+transaction ChangeOwnership {
+  --> Milk milk
 }
 
 transaction CreateOrder {
-  /*the reatailer makes an order, and specifies the amount of milk they want*/
-  //o Retailer retailer
+  o String orderId
   o Integer quantity
-  --> Retailer retailer
+  o Integer value
+  o OrderStatus orderStatus
+  --> Retailer placedBy
+  --> Distributor takenBy
+  --> Manufacturer manufacturer
 }
 
 //trade between manufacturer and distributor
 transaction Sell{
-  o Integer saleAmount
-  o Batch batch
-  --> Distributor distributor
-  --> Retailer retailer
+  o String serialNo
 }
 
 //distributor -> retailer
 transaction Deliver{
-  o Integer saleAmount
-  --> Order order
+  // --> Order order
+  // --> Milk milk
+  // o Integer saleAmount
+  // --> Distributor distributor
+  // --> Retailer retailer
+  o String serialNo
 }
 
 enum OrderStatus {
   o PLACED
+  o INTRANSIT
   o DELIVERED
-}
-
-enum SoldFlag{
-  o SOLD
-  o STOCKED
 }
